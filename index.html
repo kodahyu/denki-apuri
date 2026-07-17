@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>電工日報 | 日報管理アプリ</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="brand-mark" aria-hidden="true">電</div>
+        <div>
+          <p class="eyebrow">電気工事会社向け</p>
+          <h1>電工日報</h1>
+        </div>
+      </header>
+
+      <main>
+        <section class="screen is-active" id="login" aria-labelledby="login-title">
+          <div class="login-panel">
+            <div class="status-badge">現場でも迷わない日報管理</div>
+            <h2 id="login-title">ログイン</h2>
+            <p class="lead">作業員・管理者どちらの画面も確認できます。</p>
+
+            <label>
+              会社コード
+              <input type="text" value="DENKO-001" autocomplete="organization">
+            </label>
+            <label>
+              ログインID
+              <input type="text" value="sato" autocomplete="username">
+            </label>
+            <label>
+              パスワード
+              <input type="password" value="password" autocomplete="current-password">
+            </label>
+
+            <div class="button-stack">
+              <button class="primary-button" type="button" data-go="worker-home">作業員としてログイン</button>
+              <button class="secondary-button" type="button" data-go="admin-dashboard">管理者としてログイン</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen" id="worker-home" aria-labelledby="home-title">
+          <div class="top-bar">
+            <button class="icon-button" type="button" data-go="login" aria-label="ログアウト">←</button>
+            <div>
+              <p class="eyebrow">作業員ホーム</p>
+              <h2 id="home-title">佐藤 太郎さん</h2>
+            </div>
+          </div>
+
+          <div class="today-card">
+            <p>本日の現場</p>
+            <h3>青葉区 商業施設 幹線改修</h3>
+            <div class="meta-grid">
+              <span>集合 8:00</span>
+              <span>作業員 4名</span>
+              <span>進捗 65%</span>
+            </div>
+          </div>
+
+          <div class="quick-actions">
+            <button class="primary-button" type="button" data-go="daily-create">日報を作成</button>
+            <button class="secondary-button" type="button" data-go="site-list">現場一覧を見る</button>
+            <button class="secondary-button" type="button" data-go="daily-list">提出済み日報</button>
+          </div>
+
+          <section class="section-block">
+            <h3>今日の確認事項</h3>
+            <ul class="check-list">
+              <li>高所作業車の点検完了</li>
+              <li>停電作業は14:00から開始</li>
+              <li>盤内作業前に管理者へ連絡</li>
+            </ul>
+          </section>
+        </section>
+
+        <section class="screen" id="site-list" aria-labelledby="site-title">
+          <div class="top-bar">
+            <button class="icon-button" type="button" data-go="worker-home" aria-label="戻る">←</button>
+            <div>
+              <p class="eyebrow">現場一覧</p>
+              <h2 id="site-title">担当現場</h2>
+            </div>
+          </div>
+
+          <div class="search-box">
+            <input type="search" placeholder="現場名で検索">
+          </div>
+
+          <div class="site-list">
+            <article class="site-card">
+              <span class="status-badge">進行中</span>
+              <h3>青葉区 商業施設 幹線改修</h3>
+              <p>受変電設備・幹線ケーブル更新</p>
+              <div class="progress-line"><span style="width:65%"></span></div>
+              <button class="small-button" type="button" data-go="daily-create">この現場で日報作成</button>
+            </article>
+            <article class="site-card">
+              <span class="status-badge warning">要確認</span>
+              <h3>港南物流センター 照明LED化</h3>
+              <p>2階倉庫エリアの器具交換</p>
+              <div class="progress-line"><span style="width:38%"></span></div>
+              <button class="small-button" type="button" data-go="daily-create">この現場で日報作成</button>
+            </article>
+            <article class="site-card">
+              <span class="status-badge done">完了間近</span>
+              <h3>西町マンション 共用部改修</h3>
+              <p>分電盤・非常灯・インターホン配線</p>
+              <div class="progress-line"><span style="width:88%"></span></div>
+              <button class="small-button" type="button" data-go="daily-create">この現場で日報作成</button>
+            </article>
+          </div>
+        </section>
+
+        <section class="screen" id="daily-create" aria-labelledby="create-title">
+          <div class="top-bar">
+            <button class="icon-button" type="button" data-go="worker-home" aria-label="戻る">←</button>
+            <div>
+              <p class="eyebrow">日報作成</p>
+              <h2 id="create-title">本日の作業を記録</h2>
+            </div>
+          </div>
+
+          <form class="report-form" id="report-form">
+            <label>
+              現場名
+              <select name="siteName">
+                <option>青葉区 商業施設 幹線改修</option>
+                <option>港南物流センター 照明LED化</option>
+                <option>西町マンション 共用部改修</option>
+              </select>
+            </label>
+
+            <div class="form-row">
+              <label>
+                作業日
+                <input type="date" name="workDate" value="2026-07-16">
+              </label>
+              <label>
+                作業員名
+                <input type="text" name="workerName" value="佐藤 太郎">
+              </label>
+            </div>
+
+            <div class="form-row three">
+              <label>
+                作業人数
+                <input type="number" name="workerCount" value="4" min="1">
+              </label>
+              <label>
+                開始時間
+                <input type="time" name="startTime" value="08:00">
+              </label>
+              <label>
+                終了時間
+                <input type="time" name="endTime" value="17:00">
+              </label>
+            </div>
+
+            <label>
+              作業内容
+              <textarea name="workDetail" rows="5">1階電気室から3階EPSまで幹線ケーブルを敷設。既設ラックの確認と支持金物の増し締めを実施。</textarea>
+            </label>
+
+            <label>
+              進捗
+              <select name="progress">
+                <option>順調</option>
+                <option>やや遅れ</option>
+                <option>遅れあり</option>
+                <option>完了</option>
+              </select>
+            </label>
+
+            <label>
+              問題やトラブル
+              <textarea name="issues" rows="4" placeholder="例: 資材不足、図面差異、危険箇所など">3階EPS内で既設配管との干渉あり。明朝、監督員とルート再確認予定。</textarea>
+            </label>
+
+            <label>
+              明日の予定
+              <textarea name="tomorrowPlan" rows="4">幹線端末処理、絶縁抵抗測定、盤内結線準備。</textarea>
+            </label>
+
+            <label>
+              写真添付
+              <input type="file" name="photos" accept="image/*" multiple>
+            </label>
+
+            <button class="ai-button" type="button">AI日報生成</button>
+            <button class="primary-button" type="button" id="save-report">日報を保存</button>
+          </form>
+        </section>
+
+        <section class="screen" id="daily-list" aria-labelledby="daily-title">
+          <div class="top-bar">
+            <button class="icon-button" type="button" data-go="worker-home" aria-label="戻る">←</button>
+            <div>
+              <p class="eyebrow">日報一覧</p>
+              <h2 id="daily-title">提出状況</h2>
+            </div>
+          </div>
+
+          <div class="filter-tabs" role="tablist" aria-label="日報フィルター">
+            <button class="is-selected" type="button">すべて</button>
+            <button type="button">未提出</button>
+            <button type="button">確認済み</button>
+          </div>
+
+          <div class="report-list">
+            <article class="report-card">
+              <div>
+                <span class="status-badge done">確認済み</span>
+                <h3>7月16日 青葉区 商業施設</h3>
+                <p>幹線ケーブル敷設 / 4名 / 順調</p>
+              </div>
+              <button class="small-button" type="button">詳細</button>
+            </article>
+            <article class="report-card">
+              <div>
+                <span class="status-badge">提出済み</span>
+                <h3>7月15日 青葉区 商業施設</h3>
+                <p>ラック調整・資材搬入 / 3名 / 順調</p>
+              </div>
+              <button class="small-button" type="button">詳細</button>
+            </article>
+            <article class="report-card">
+              <div>
+                <span class="status-badge warning">下書き</span>
+                <h3>7月14日 港南物流センター</h3>
+                <p>照明器具交換 / 2名 / やや遅れ</p>
+              </div>
+              <button class="small-button" type="button">編集</button>
+            </article>
+          </div>
+        </section>
+
+        <section class="screen" id="admin-dashboard" aria-labelledby="admin-title">
+          <div class="top-bar">
+            <button class="icon-button" type="button" data-go="login" aria-label="ログアウト">←</button>
+            <div>
+              <p class="eyebrow">管理者ダッシュボード</p>
+              <h2 id="admin-title">現場全体の状況</h2>
+            </div>
+          </div>
+
+          <div class="kpi-grid">
+            <article>
+              <p>本日の日報</p>
+              <strong>18 / 24</strong>
+              <span>提出済み</span>
+            </article>
+            <article>
+              <p>進行中現場</p>
+              <strong>7</strong>
+              <span>2件 要確認</span>
+            </article>
+            <article>
+              <p>安全確認</p>
+              <strong>96%</strong>
+              <span>チェック完了</span>
+            </article>
+          </div>
+
+          <section class="section-block">
+            <h3>要確認の日報</h3>
+            <div class="alert-list">
+              <button type="button">
+                <span>港南物流センター</span>
+                <strong>作業遅れ・追加人員相談</strong>
+              </button>
+              <button type="button">
+                <span>青葉区 商業施設</span>
+                <strong>既設配管との干渉あり</strong>
+              </button>
+            </div>
+          </section>
+
+          <section class="section-block">
+            <h3>現場別進捗</h3>
+            <div class="admin-site-row">
+              <span>青葉区 商業施設</span>
+              <div class="progress-line"><span style="width:65%"></span></div>
+              <strong>65%</strong>
+            </div>
+            <div class="admin-site-row">
+              <span>港南物流センター</span>
+              <div class="progress-line"><span style="width:38%"></span></div>
+              <strong>38%</strong>
+            </div>
+            <div class="admin-site-row">
+              <span>西町マンション</span>
+              <div class="progress-line"><span style="width:88%"></span></div>
+              <strong>88%</strong>
+            </div>
+          </section>
+
+          <section class="section-block">
+            <h3>保存された日報一覧</h3>
+            <div class="report-list" id="admin-report-list"></div>
+          </section>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" aria-label="主要ナビゲーション">
+        <button type="button" data-go="worker-home">ホーム</button>
+        <button type="button" data-go="site-list">現場</button>
+        <button type="button" data-go="daily-create">作成</button>
+        <button type="button" data-go="daily-list">日報</button>
+        <button type="button" data-go="admin-dashboard">管理</button>
+      </nav>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

@@ -3,111 +3,12 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>電工日報 | 日報管理アプリ</title>
-    <link rel="stylesheet" href="./styles.css">
-  </head>
-  <body>
-    <div class="app-shell">
-      <header <!doctype html>
-<html lang="ja">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>電気工事日報</title>
     <link rel="stylesheet" href="./styles.css">
   </head>
   <body>
-    <header class="app-header">
-      <div>
-        <p class="eyebrow">Electrical Work Report</p>
-        <h1>電気工事日報</h1>
-      </div>
-      <nav class="top-tabs" aria-label="画面切り替え">
-        <button class="tab-button active" type="button" data-view="submit">日報入力</button>
-        <button class="tab-button" type="button" data-view="admin">管理者</button>
-      </nav>
-    </header>
-
-    <main>
-      <section class="view-panel active" id="submit-view" aria-labelledby="submit-title">
-        <div class="section-head">
-          <h2 id="submit-title">日報入力</h2>
-          <p>作業後の日報を保存します。</p>
-        </div>
-
-        <form id="report-form" class="report-form">
-          <label>
-            <span>現場名</span>
-            <input name="siteName" type="text" autocomplete="organization" required>
-          </label>
-
-          <label>
-            <span>作業日</span>
-            <input name="workDate" type="date" required>
-          </label>
-
-          <label>
-            <span>作業員名</span>
-            <input name="workerName" type="text" autocomplete="name" required>
-          </label>
-
-          <label>
-            <span>作業内容</span>
-            <textarea name="workContent" rows="5" required></textarea>
-          </label>
-
-          <label>
-            <span>進捗</span>
-            <select name="progress" required>
-              <option value="">選択してください</option>
-              <option>未着手</option>
-              <option>作業中</option>
-              <option>確認待ち</option>
-              <option>完了</option>
-            </select>
-          </label>
-
-          <label>
-            <span>開始時刻</span>
-            <input name="startTime" type="time">
-          </label>
-
-          <label>
-            <span>終了時刻</span>
-            <input name="endTime" type="time">
-          </label>
-
-          <label>
-            <span>使用材料</span>
-            <textarea name="materials" rows="3"></textarea>
-          </label>
-
-          <label>
-            <span>安全確認</span>
-            <select name="safetyCheck">
-              <option>問題なし</option>
-              <option>要確認</option>
-              <option>是正済み</option>
-            </select>
-          </label>
-
-          <label>
-            <span>備考</span>
-            <textarea name="notes" rows="3"></textarea>
-          </label>
-
-          <button class="primary-button" type="submit">保存</button>
-          <p class="save-message" id="save-message" role="status" aria-live="polite"></p>
-        </form>
-      </section>
-
-      <section class="view-panel" id="admin-view" aria-labelledby="admin-title">
-        <div class="section-head">
-          <h2 id="admin-title">管理者画面</h2>
-          <p>提出された日報を作業日の新しい順で確認できます。</p>
-        </div>
-
-        <div id="report-list" class="report-list" aria-live="polite"></div>class="app-header">
+    <div class="app-shell">
+      <header class="app-header">
         <div class="brand-mark" aria-hidden="true">電</div>
         <div>
           <p class="eyebrow">電気工事会社向け</p>
@@ -163,7 +64,6 @@
 
           <div class="quick-actions">
             <button class="primary-button" type="button" data-go="daily-create">日報を作成</button>
-            <button class="secondary-button" type="button" data-go="site-list">現場一覧を見る</button>
             <button class="secondary-button" type="button" data-go="daily-list">提出済み日報</button>
           </div>
 
@@ -175,44 +75,6 @@
               <li>盤内作業前に管理者へ連絡</li>
             </ul>
           </section>
-        </section>
-
-        <section class="screen" id="site-list" aria-labelledby="site-title">
-          <div class="top-bar">
-            <button class="icon-button" type="button" data-go="worker-home" aria-label="戻る">←</button>
-            <div>
-              <p class="eyebrow">現場一覧</p>
-              <h2 id="site-title">担当現場</h2>
-            </div>
-          </div>
-
-          <div class="search-box">
-            <input type="search" placeholder="現場名で検索">
-          </div>
-
-          <div class="site-list">
-            <article class="site-card">
-              <span class="status-badge">進行中</span>
-              <h3>青葉区 商業施設 幹線改修</h3>
-              <p>受変電設備・幹線ケーブル更新</p>
-              <div class="progress-line"><span style="width:65%"></span></div>
-              <button class="small-button" type="button" data-go="daily-create">この現場で日報作成</button>
-            </article>
-            <article class="site-card">
-              <span class="status-badge warning">要確認</span>
-              <h3>港南物流センター 照明LED化</h3>
-              <p>2階倉庫エリアの器具交換</p>
-              <div class="progress-line"><span style="width:38%"></span></div>
-              <button class="small-button" type="button" data-go="daily-create">この現場で日報作成</button>
-            </article>
-            <article class="site-card">
-              <span class="status-badge done">完了間近</span>
-              <h3>西町マンション 共用部改修</h3>
-              <p>分電盤・非常灯・インターホン配線</p>
-              <div class="progress-line"><span style="width:88%"></span></div>
-              <button class="small-button" type="button" data-go="daily-create">この現場で日報作成</button>
-            </article>
-          </div>
         </section>
 
         <section class="screen" id="daily-create" aria-labelledby="create-title">
@@ -407,7 +269,6 @@
 
       <nav class="bottom-nav" aria-label="主要ナビゲーション">
         <button type="button" data-go="worker-home">ホーム</button>
-        <button type="button" data-go="site-list">現場</button>
         <button type="button" data-go="daily-create">作成</button>
         <button type="button" data-go="daily-list">日報</button>
         <button type="button" data-go="admin-dashboard">管理</button>

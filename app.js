@@ -1,150 +1,133 @@
-const screens = Array.from(document.querySelectorAll(".screen"));
-const navButtons = Array.from(document.querySelectorAll("[data-go]"));
-const bottomButtons = Array.from(document.querySelectorAll(".bottom-nav button"));
+const STORAGE_KEY = "electricalDailyReports";
+
+const fieldLabels = {
+  siteName: "現場名",
+  workDate: "作業日",
+  workerName: "作業員名",
+  workContent: "作業内容",
+  progress: "進捗",
+  startTime: "開始時刻",
+  endTime: "終了時刻",
+  materials: "使用材料",
+  safetyCheck: "安全確認",
+  notes: "備考",
+  submittedAt: "保存日時",
+};
+
+const requiredCardFields = [
+  "siteName",
+  "workDate",
+  "workerName",
+  "workContent",
+  "progress",
+];
+
+const detailFieldOrder = [
+  "siteName",
+  "workDate",
+  "workerName",
+  "workContent",
+  "progress",
+  "startTime",
+  "endTime",
+  "materials",
+  "safetyCheck",
+  "notes",
+  "submittedAt",
+];
+
 const reportForm = document.querySelector("#report-form");
-const saveReportButton = document.querySelector("#save-report");
-const adminReportList = document.querySelector("#admin-report-list");
-const storageKey = "electricDailyReports";
+const saveMessage = document.querySelector("#save-message");
+const reportList = document.querySelector("#report-list");
+const detailScreen = document.querySelector("#detail-screen");
+const detailContent = document.querySelector("#detail-content");
+const detailBack = document.querySelector("#detail-back");
+const tabButtons = document.querySelectorAll(".tab-button");
+const views = {
+  submit: document.querySelector("#submit-view"),
+  admin: document.querySelector("#admin-view"),
+};
 
-function showScreen(id) {
-  screens.forEach((screen) => {
-    screen.classList.toggle("is-active", screen.id === id);
-  });
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
 
-  bottomButtons.forEach((button) => {
-    button.classList.toggle("is-active", button.dataset.go === id);
-  });
+function formatDate(value) {
+  if (!value) return "未入力";
+  const date = new Date(`${value}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return value;
+  return new Intl.DateTimeFormat("ja-JP", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
+}
 
-  window.scrollTo({ top: 0, behavior: "smooth" });
+function formatDateTime(value) {
+  if (!value) return "未入力";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return new Intl.DateTimeFormat("ja-JP", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
 }
 
 function getReports() {
-  const savedReports = localStorage.getItem(storageKey);
-
-  if (!savedReports) {
-    return [];
-  }
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return [];
 
   try {
-    return JSON.parse(savedReports);
-  } catch (error) {
-    console.warn("日報データを読み込めませんでした。", error);
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
     return [];
   }
 }
 
 function saveReports(reports) {
-  localStorage.setItem(storageKey, JSON.stringify(reports));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(reports));
 }
 
-function formatWorkDate(dateValue) {
-  if (!dateValue) {
-    return "日付未入力";
+// 画面遷移制御
+function showScreen(screenId) {
+  const screens = document.querySelectorAll('.screen');
+  screens.forEach(screen => {
+    screen.classList.remove('is-active');
+  });
+  const targetScreen = document.getElementById(screenId);
+  if (targetScreen) {
+    targetScreen.classList.add('is-active');
   }
-
-  const date = new Date(`${dateValue}T00:00:00`);
-
-  if (Number.isNaN(date.getTime())) {
-    return dateValue;
-  }
-
-  return new Intl.DateTimeFormat("ja-JP", {
-    month: "long",
-    day: "numeric",
-  }).format(date);
 }
 
-function createReportCard(report) {
-  const card = document.createElement("article");
-  card.className = "report-card";
-
-  const content = document.createElement("div");
-  const badge = document.createElement("span");
-  const title = document.createElement("h3");
-  const summary = document.createElement("p");
-  const detail = document.createElement("strong");
-  const detailButton = document.createElement("button");
-
-  badge.className = "status-badge";
-  badge.textContent = "保存済み";
-  title.textContent = `${formatWorkDate(report.workDate)} ${report.siteName}`;
-  summary.textContent = `${report.workerName} / ${report.workerCount}名 / ${report.startTime}-${report.endTime} / ${report.progress}`;
-  detail.textContent = report.issues
-    ? `要確認: ${report.issues}`
-    : `作業内容: ${report.workDetail}`;
-  detailButton.className = "small-button";
-  detailButton.type = "button";
-  detailButton.textContent = report.photoCount > 0 ? `写真 ${report.photoCount}件` : "詳細";
-
-  content.append(badge, title, summary, detail);
-  card.append(content, detailButton);
-
-  return card;
-}
-
-function renderAdminReports() {
-  if (!adminReportList) {
-    return;
-  }
-
-  const reports = getReports();
-  adminReportList.replaceChildren();
-
-  if (reports.length === 0) {
-    const emptyState = document.createElement("div");
-    const message = document.createElement("p");
-
-    emptyState.className = "empty-state";
-    message.textContent = "まだ保存された日報はありません。";
-    emptyState.append(message);
-    adminReportList.append(emptyState);
-    return;
-  }
-
-  reports
-    .slice()
-    .reverse()
-    .forEach((report) => {
-      adminReportList.append(createReportCard(report));
+// 初期化
+function initializeScreenNavigation() {
+  // data-go ボタンのイベントリスナー設定
+  const navButtons = document.querySelectorAll('[data-go]');
+  navButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      const screenId = button.getAttribute('data-go');
+      showScreen(screenId);
     });
+  });
 }
 
-function handleSaveReport() {
-  const formData = new FormData(reportForm);
-  const photos = reportForm.elements.photos.files;
-  const report = {
-    id: crypto.randomUUID(),
-    siteName: formData.get("siteName"),
-    workDate: formData.get("workDate"),
-    workerName: formData.get("workerName"),
-    workerCount: formData.get("workerCount"),
-    startTime: formData.get("startTime"),
-    endTime: formData.get("endTime"),
-    workDetail: formData.get("workDetail"),
-    progress: formData.get("progress"),
-    issues: formData.get("issues"),
-    tomorrowPlan: formData.get("tomorrowPlan"),
-    photoCount: photos.length,
-    photoNames: Array.from(photos).map((photo) => photo.name),
-    savedAt: new Date().toISOString(),
-  };
-
-  const reports = getReports();
-  reports.push(report);
-  saveReports(reports);
-  renderAdminReports();
-  alert("日報をブラウザ内に保存しました。管理者画面の日報一覧に表示します。");
-  showScreen("admin-dashboard");
+// DOMContentLoaded または即座に実行
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeScreenNavigation);
+} else {
+  initializeScreenNavigation();
 }
 
-navButtons.forEach((button) => {
-  button.addEventListener("click", () => showScreen(button.dataset.go));
-});
-
-document.querySelector(".ai-button").addEventListener("click", () => {
-  alert("AI APIはまだ接続していません。次の段階で、入力内容から日報文を生成できるようにします。");
-});
-
-saveReportButton.addEventListener("click", handleSaveReport);
-renderAdminReports();
-showScreen("login");
+function sortReportsByNewestWorkDate(reports) {
+}

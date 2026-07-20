@@ -124,7 +124,7 @@
 
             <label>
               作業内容
-              <textarea name="workDetail" rows="5">1階電気室から3階EPSまで幹線ケーブルを敷設。既設ラックの確認と支持金物の増し締めを実施。</textarea>
+              <textarea name="workContent" rows="5">1階電気室から3階EPSまで幹線ケーブルを敷設。既設ラックの確認と支持金物の増し締めを実施。</textarea>
             </label>
 
             <label>
@@ -135,6 +135,16 @@
                 <option>遅れあり</option>
                 <option>完了</option>
               </select>
+            </label>
+
+            <label>
+              使用材料
+              <input type="text" name="materials" value="幹線ケーブル、支持金物、結束バンド">
+            </label>
+
+            <label>
+              安全確認
+              <input type="text" name="safetyCheck" value="ヘルメット、保護具、足場確認済み">
             </label>
 
             <label>
@@ -157,6 +167,7 @@
               <button class="primary-button" type="button" id="save-report">保存</button>
               <button class="secondary-button" type="button" data-go="worker-home">戻る</button>
             </div>
+            <p id="save-message" class="save-message" aria-live="polite"></p>
           </form>
         </section>
 

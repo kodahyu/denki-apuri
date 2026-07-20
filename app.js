@@ -127,6 +127,45 @@ function initializeScreenNavigation() {
   });
 
   showScreen('login');
+
+  const saveReportButton = document.querySelector("#save-report");
+  if (saveReportButton) {
+    saveReportButton.addEventListener('click', () => {
+      const data = collectReportData();
+      if (!data) return;
+
+      const reports = getReports();
+      reports.push(data);
+      saveReports(reports);
+
+      if (saveMessage) {
+        saveMessage.textContent = '保存しました';
+      }
+
+      setTimeout(() => {
+        showScreen('worker-home');
+      }, 600);
+    });
+  }
+}
+
+function collectReportData() {
+  if (!reportForm) return null;
+  const formData = new FormData(reportForm);
+
+  return {
+    siteName: formData.get('siteName')?.toString() ?? '',
+    workDate: formData.get('workDate')?.toString() ?? '',
+    workerName: formData.get('workerName')?.toString() ?? '',
+    workContent: formData.get('workContent')?.toString() ?? '',
+    progress: formData.get('progress')?.toString() ?? '',
+    startTime: formData.get('startTime')?.toString() ?? '',
+    endTime: formData.get('endTime')?.toString() ?? '',
+    materials: formData.get('materials')?.toString() ?? '',
+    safetyCheck: formData.get('safetyCheck')?.toString() ?? '',
+    notes: formData.get('issues')?.toString() ?? '',
+    submittedAt: new Date().toISOString(),
+  };
 }
 
 // DOMContentLoaded または即座に実行

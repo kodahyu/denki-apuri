@@ -138,7 +138,7 @@
             </label>
 
             <label>
-              問題やトラブル
+              備考
               <textarea name="issues" rows="4" placeholder="例: 資材不足、図面差異、危険箇所など">3階EPS内で既設配管との干渉あり。明朝、監督員とルート再確認予定。</textarea>
             </label>
 
@@ -153,7 +153,10 @@
             </label>
 
             <button class="ai-button" type="button">AI日報生成</button>
-            <button class="primary-button" type="button" id="save-report">日報を保存</button>
+            <div class="button-stack">
+              <button class="primary-button" type="button" id="save-report">保存</button>
+              <button class="secondary-button" type="button" data-go="worker-home">戻る</button>
+            </div>
           </form>
         </section>
 

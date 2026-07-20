@@ -43,6 +43,7 @@ const detailScreen = document.querySelector("#detail-screen");
 const detailContent = document.querySelector("#detail-content");
 const detailBack = document.querySelector("#detail-back");
 const tabButtons = document.querySelectorAll(".tab-button");
+const bottomNavButtons = document.querySelectorAll(".bottom-nav button");
 const views = {
   submit: document.querySelector("#submit-view"),
   admin: document.querySelector("#admin-view"),
@@ -107,6 +108,10 @@ function showScreen(screenId) {
   if (targetScreen) {
     targetScreen.classList.add('is-active');
   }
+
+  bottomNavButtons.forEach(button => {
+    button.classList.toggle('is-active', button.getAttribute('data-go') === screenId);
+  });
 }
 
 // 初期化
@@ -120,6 +125,8 @@ function initializeScreenNavigation() {
       showScreen(screenId);
     });
   });
+
+  showScreen('login');
 }
 
 // DOMContentLoaded または即座に実行

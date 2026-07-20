@@ -186,14 +186,14 @@
             <button type="button">確認済み</button>
           </div>
 
-          <div class="report-list">
+          <div class="report-list" id="report-list">
             <article class="report-card">
               <div>
                 <span class="status-badge done">確認済み</span>
                 <h3>7月16日 青葉区 商業施設</h3>
                 <p>幹線ケーブル敷設 / 4名 / 順調</p>
               </div>
-              <button class="small-button" type="button">詳細</button>
+              <button class="small-button" type="button" data-report-index="0">詳細</button>
             </article>
             <article class="report-card">
               <div>
@@ -201,7 +201,7 @@
                 <h3>7月15日 青葉区 商業施設</h3>
                 <p>ラック調整・資材搬入 / 3名 / 順調</p>
               </div>
-              <button class="small-button" type="button">詳細</button>
+              <button class="small-button" type="button" data-report-index="1">詳細</button>
             </article>
             <article class="report-card">
               <div>
@@ -211,6 +211,19 @@
               </div>
               <button class="small-button" type="button">編集</button>
             </article>
+          </div>
+        </section>
+
+        <section class="screen" id="detail-screen" aria-labelledby="detail-title">
+          <div class="top-bar">
+            <button class="icon-button" type="button" data-go="daily-list" aria-label="戻る">←</button>
+            <div>
+              <p class="eyebrow">日報詳細</p>
+              <h2 id="detail-title">提出済み日報</h2>
+            </div>
+          </div>
+          <div class="section-block" id="detail-content">
+            <p>詳細な日報を選択してください。</p>
           </div>
         </section>
 

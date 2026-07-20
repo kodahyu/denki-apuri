@@ -112,6 +112,64 @@ function showScreen(screenId) {
   bottomNavButtons.forEach(button => {
     button.classList.toggle('is-active', button.getAttribute('data-go') === screenId);
   });
+
+  if (screenId === 'daily-list') {
+    renderReportList();
+  }
+}
+
+function renderReportList() {
+  if (!reportList) return;
+  const reports = getReports();
+
+  if (!reports.length) {
+    reportList.innerHTML = `
+      <div class="empty-state">
+        <p>提出済み日報はありません。</p>
+      </div>
+    `;
+    return;
+  }
+
+  reportList.innerHTML = reports
+    .map((report, index) => {
+      const status = report.submittedAt ? '提出済み' : '下書き';
+      const statusClass = report.submittedAt ? '' : 'warning';
+      return `
+        <article class="report-card">
+          <div>
+            <span class="status-badge ${statusClass}">${escapeHtml(status)}</span>
+            <h3>${escapeHtml(formatDate(report.workDate))} ${escapeHtml(report.siteName)}</h3>
+            <p>${escapeHtml(report.workContent)} / ${escapeHtml(report.workerName)} / ${escapeHtml(report.progress)}</p>
+          </div>
+          <button class="small-button" type="button" data-report-index="${index}">詳細</button>
+        </article>
+      `;
+    })
+    .join('');
+}
+
+function showReportDetail(index) {
+  const reports = getReports();
+  const report = reports[index];
+  if (!report || !detailContent) return;
+
+  detailContent.innerHTML = `
+    <div class="section-block">
+      <div class="detail-row"><strong>現場名</strong><p>${escapeHtml(report.siteName)}</p></div>
+      <div class="detail-row"><strong>作業日</strong><p>${escapeHtml(formatDate(report.workDate))}</p></div>
+      <div class="detail-row"><strong>作業員名</strong><p>${escapeHtml(report.workerName)}</p></div>
+      <div class="detail-row"><strong>作業内容</strong><p>${escapeHtml(report.workContent)}</p></div>
+      <div class="detail-row"><strong>進捗</strong><p>${escapeHtml(report.progress)}</p></div>
+      <div class="detail-row"><strong>開始時刻</strong><p>${escapeHtml(report.startTime)}</p></div>
+      <div class="detail-row"><strong>終了時刻</strong><p>${escapeHtml(report.endTime)}</p></div>
+      <div class="detail-row"><strong>使用材料</strong><p>${escapeHtml(report.materials)}</p></div>
+      <div class="detail-row"><strong>安全確認</strong><p>${escapeHtml(report.safetyCheck)}</p></div>
+      <div class="detail-row"><strong>備考</strong><p>${escapeHtml(report.notes)}</p></div>
+      <div class="detail-row"><strong>保存日時</strong><p>${escapeHtml(formatDateTime(report.submittedAt))}</p></div>
+    </div>
+  `;
+  showScreen('detail-screen');
 }
 
 // 初期化
@@ -147,6 +205,19 @@ function initializeScreenNavigation() {
       }, 600);
     });
   }
+
+  document.body.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+
+    const detailButton = target.closest('[data-report-index]');
+    if (detailButton) {
+      const index = Number(detailButton.getAttribute('data-report-index'));
+      if (!Number.isNaN(index)) {
+        showReportDetail(index);
+      }
+    }
+  });
 }
 
 function collectReportData() {
